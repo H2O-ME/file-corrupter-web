@@ -38,15 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        fileInput.addEventListener('change', () => {
-            setTimeout(() => { fileInput.value = ''; }, 100);
-        });
-        uploadArea.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                fileInput.click();
-            }
-        });
+        fileInput.addEventListener('change', handleFileSelectEvent);
+        uploadArea.addEventListener('dragover', handleDragOver);
+        uploadArea.addEventListener('dragleave', handleDragLeave);
+        uploadArea.addEventListener('drop', handleDrop);
 
         formatDisplay.addEventListener('click', () => {
             formatOptions.classList.toggle('hidden');
@@ -128,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.files.length > 0) {
             handleFileSelect(e.target.files[0]);
         }
+        setTimeout(() => { fileInput.value = ''; }, 100);
     }
 
     function handleDragOver(e) {
