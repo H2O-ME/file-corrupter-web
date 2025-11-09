@@ -1,0 +1,55 @@
+.nav-item.active {
+    background: linear-gradient(90deg, #1e40af 0%, #7c3aed 100%);
+    color: #fff;
+    box-shadow: 0 2px 16px 0 rgba(30,64,175,0.2);
+}
+.nav-item:not(.active) {
+    color: rgba(0,0,0,0.9);
+}
+.drag-active {
+    border-color: #1e40af;
+    background: rgba(30, 64, 175, 0.12);
+}
+.gradient-bg {
+    background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+}
+.glass-effect {
+    backdrop-filter: blur(16px);
+    background: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+.modern-input {
+    border: none;
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(8px);
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px 0 rgba(30,64,175,0.15);
+    transition: box-shadow 0.2s;
+}
+.modern-input:focus {
+    box-shadow: 0 0 0 4px rgba(30,64,175,0.3);
+    outline: none;
+}
+.modern-btn {
+    background: linear-gradient(90deg, #1e40af 0%, #7c3aed 100%);
+    color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 16px 0 rgba(30,64,175,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.modern-btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 4px 24px 0 rgba(30,64,175,0.3);
+}
+.modern-progress {
+    background: linear-gradient(90deg, #1e40af 0%, #7c3aed 100%);
+    border-radius: 1rem;
+    height: 1rem;
+}
+.modern-toast {
+    backdrop-filter: blur(12px);
+    background: linear-gradient(90deg, #1e40afcc 0%, #7c3aedcc 100%);
+    color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 16px 0 rgba(30,64,175,0.3);
+}

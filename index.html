@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="h-screen">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件损坏器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'light-bg': '#f8fafc',
+                        'dark-bg': '#0f172a',
+                        'light-card': '#ffffff',
+                        'dark-card': '#1e293b',
+                        'light-text': '#000000',
+                        'dark-text': '#f8fafc',
+                        'light-subtle-text': '#475569',
+                        'dark-subtle-text': '#cbd5e1',
+                        'accent': '#1e40af',
+                        'accent-hover': '#1d4ed8',
+                        'border-light': '#cbd5e1',
+                        'border-dark': '#475569',
+                        'success': '#059669',
+                        'error': '#dc2626',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-light-bg text-light-text font-sans antialiased transition-colors duration-300">
+
+        <div class="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center py-8">
+            <div class="w-full max-w-5xl mx-auto px-4">
+                <header class="flex items-center justify-between mb-10">
+                    <div>
+                        <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">文件损坏器</h1>
+                        <p class="mt-2 text-base text-gray-500">文件处理工具</p>
+                    </div>
+                </header>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <nav class="lg:w-72 w-full flex-shrink-0">
+                        <div class="glass-effect gradient-bg rounded-3xl shadow-xl border border-white/30 p-7 flex flex-col gap-5 backdrop-blur-lg">
+                            <a href="#" class="nav-item flex items-center gap-3 px-5 py-4 rounded-2xl font-semibold text-light-text hover:bg-white/10 transition active" data-section="corrupt">
+                                损坏现有文件
+                            </a>
+                            <a href="#" class="nav-item flex items-center gap-3 px-5 py-4 rounded-2xl font-semibold text-light-text hover:bg-white/10 transition" data-section="generate">
+                                生成损坏文件
+                            </a>
+                        </div>
+                    </nav>
+                    <main class="flex-1">
+                        <section class="content-section" id="corrupt">
+                            <div class="glass-effect gradient-bg rounded-3xl shadow-2xl border border-white/30 p-12 backdrop-blur-lg">
+                                <div class="mb-8">
+                                    <h2 class="text-2xl font-bold text-light-text mb-2">损坏现有文件</h2>
+                                    <p class="text-base text-light-subtle-text">选择一个文件并进行随机损坏处理</p>
+                                </div>
+                                <div id="uploadArea" class="relative border-2 border-dashed border-white/40 rounded-2xl p-12 text-center transition cursor-pointer hover:border-indigo-400 hover:bg-white/10" role="button" tabindex="0" aria-label="点击或拖拽文件到此处上传">
+                                    <input type="file" id="fileInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" aria-hidden="true">
+                                    <div class="flex flex-col items-center">
+                                        <svg class="mx-auto h-16 w-16 text-indigo-200 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                        <p class="text-lg font-semibold text-light-text mb-1">点击或拖拽文件到此处</p>
+                                        <p class="text-sm text-light-subtle-text">支持任意文件格式，最大 100MB</p>
+                                    </div>
+                                </div>
+                                <div class="mt-8 hidden" id="fileInfo">
+                                    <div class="flex items-center justify-between bg-white/10 p-4 rounded-2xl">
+                                        <div class="flex items-center gap-3">
+                                            <svg class="h-8 w-8 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            </svg>
+                                            <div>
+                                                <p class="text-sm font-semibold text-light-text"><span id="fileName"></span></p>
+                                                <p class="text-xs text-light-subtle-text"><span id="fileSize"></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="corruptBtn" disabled class="w-full mt-8 modern-btn disabled:opacity-50 disabled:cursor-not-allowed font-bold py-4 px-6 transition">开始损坏</button>
+                            </div>
+                        </section>
+                        <section class="content-section hidden" id="generate">
+                            <div class="glass-effect gradient-bg rounded-3xl shadow-2xl border border-white/30 p-12 backdrop-blur-lg">
+                                <div class="mb-8">
+                                    <h2 class="text-2xl font-bold text-light-text mb-2">生成损坏文件</h2>
+                                    <p class="text-base text-light-subtle-text">创建指定大小和格式的随机损坏文件</p>
+                                </div>
+                                <div class="space-y-8">
+                                    <div>
+                                        <label for="fileNameInput" class="block text-sm font-semibold text-light-text mb-2">文件名</label>
+                                        <input type="text" id="fileNameInput" placeholder="generated_file" class="w-full px-5 py-4 modern-input text-black" />
+                                    </div>
+                                    <div>
+                                        <label for="fileSizeInput" class="block text-sm font-semibold text-light-text mb-2">文件大小 (MB)</label>
+                                        <input type="number" id="fileSizeInput" min="0.1" step="0.1" value="1" class="w-full px-5 py-4 modern-input text-black" />
+                                    </div>
+                                    <div>
+                                        <label for="fileFormatSelect" class="block text-sm font-semibold text-light-text mb-2">文件格式</label>
+                                        <div class="relative">
+                                            <div class="w-full px-5 py-4 modern-input text-black cursor-pointer flex justify-between items-center" id="formatDisplay">
+                                                <span>.doc</span>
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                </svg>
+                                            </div>
+                                            <ul class="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden z-10" id="formatOptions">
+                                                <li class="px-5 py-2 hover:bg-gray-100 cursor-pointer" data-value="doc">.doc</li>
+                                                <li class="px-5 py-2 hover:bg-gray-100 cursor-pointer" data-value="xls">.xls</li>
+                                                <li class="px-5 py-2 hover:bg-gray-100 cursor-pointer" data-value="ppt">.ppt</li>
+                                                <li class="px-5 py-2 hover:bg-gray-100 cursor-pointer" data-value="pdf">.pdf</li>
+                                                <li class="px-5 py-2 hover:bg-gray-100 cursor-pointer" data-value="txt">.txt</li>
+                                                <li class="px-5 py-2 hover:bg-gray-100 cursor-pointer" data-value="jpg">.jpg</li>
+                                                <li class="px-5 py-2 hover:bg-gray-100 cursor-pointer" data-value="png">.png</li>
+                                                <li class="px-5 py-2 hover:bg-gray-100 cursor-pointer" data-value="zip">.zip</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="generateBtn" class="w-full mt-10 modern-btn font-bold py-4 px-6 transition">生成文件</button>
+                            </div>
+                        </section>
+                    </main>
+                </div>
+                <div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-sm z-50 px-4">
+                    <div id="progressContainer" class="glass-effect gradient-bg rounded-2xl shadow-2xl border border-white/30 p-5 hidden backdrop-blur-lg">
+                        <p id="progressText" class="text-center font-semibold text-light-text mb-3">处理中...</p>
+                        <div class="w-full bg-white/20 rounded-full h-4 overflow-hidden">
+                            <div id="progressFill" class="modern-progress transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
